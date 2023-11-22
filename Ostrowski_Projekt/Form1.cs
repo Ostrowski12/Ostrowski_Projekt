@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -26,7 +19,18 @@ namespace Ostrowski_Projekt
 
         private void button2_Click(object sender, EventArgs e)
         {
-            liczby.Sortowanie(textBox2);
+            if (checkBox1.Checked)
+            {
+                liczby.Sortowanie(textBox2);
+            }
+            else if (checkBox2.Checked)
+            {
+                liczby.Sortowanie2(textBox2);
+            }
+            else if (checkBox3.Checked)
+            {
+                liczby.Sortowanie3(textBox2);
+            }
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -35,6 +39,11 @@ namespace Ostrowski_Projekt
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
         }
@@ -86,7 +95,63 @@ namespace Ostrowski_Projekt
                 textBox2.Text += " " + tab[i];
             }
         }
+
+        public void Sortowanie2(System.Windows.Forms.TextBox textBox2)
+        {
+            textBox2.Text = "";
+            int tmp;
+            int j;
+            for (int i = 1; i < tab.Length; i++)
+            {
+                tmp = tab[i];
+                j = i - 1;
+                while (j >= 0 && tab[j] > tmp)
+                {
+                    tab[j + 1] = tab[j];
+                    j--;
+                }
+                tab[j + 1] = tmp;
+                // 3 2 5 6
+                // j i
+            }
+
+            for (int i = 0; i < tab.Length; i++)
+            {
+                textBox2.Text += " " + tab[i];
+            }
+        }
+        public void Sortowanie3(System.Windows.Forms.TextBox textBox2)
+        {
+            textBox2.Text = "";
+            int tmp;
+
+            for (int i = 0; i < tab.Length - 1; i++)
+            {
+                tmp = tab[i];
+                for (int j = i + 1; j < tab.Length; j++)
+                {
+
+                    if (tab[j] < tab[i])
+                    {
+                        tmp = tab[i];
+                        tab[i] = tab[j];
+                        tab[j] = tmp;
+                    }
+
+                }
+
+            }
+
+
+            for (int i = 0; i < tab.Length; i++)
+            {
+                textBox2.Text += " " + tab[i];
+            }
+        }
+
     }
 
 
+
 }
+
