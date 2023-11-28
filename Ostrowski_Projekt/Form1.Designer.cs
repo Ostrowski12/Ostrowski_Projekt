@@ -57,11 +57,12 @@
             this.chart1.Name = "chart1";
             series1.ChartArea = "ChartArea1";
             series1.Legend = "Legend1";
-            series1.Name = "Series1";
+            series1.Name = "czas";
             this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(453, 386);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
+            this.chart1.Click += new System.EventHandler(this.chart1_Click);
             // 
             // button1
             // 

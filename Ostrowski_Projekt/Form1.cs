@@ -4,7 +4,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Ostrowski_Projekt
 {
-    public partial class Form1 : Form
+    public partial class Form1 : Form   
     {
         private Liczby liczby = new Liczby();
         public Form1()
@@ -22,14 +22,17 @@ namespace Ostrowski_Projekt
             if (checkBox1.Checked)
             {
                 liczby.Sortowanie(textBox2);
+               
             }
             else if (checkBox2.Checked)
             {
                 liczby.Sortowanie2(textBox2);
+               
             }
             else if (checkBox3.Checked)
             {
                 liczby.Sortowanie3(textBox2);
+              
             }
         }
 
@@ -47,15 +50,23 @@ namespace Ostrowski_Projekt
         {
 
         }
+
+        private void chart1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
     }
     public class Liczby
     {
         Random generuj = new Random();
-        private int[] tab;
+        public int[] tab;
+        
 
         public Liczby()
         {
-            tab = new int[10];
+            tab = new int[1000];
         }
 
         public void Generowanie(System.Windows.Forms.TextBox textBox1)
@@ -77,6 +88,9 @@ namespace Ostrowski_Projekt
             textBox2.Text = "";
             int tmp;
 
+            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
+
             for (int i = 0; i < tab.Length - 1; i++)
             {
                 for (int j = 0; j < tab.Length - 1 - i; j++)
@@ -89,11 +103,13 @@ namespace Ostrowski_Projekt
                     }
                 }
             }
-
+            stopwatch.Stop();
             for (int i = 0; i < tab.Length; i++)
             {
                 textBox2.Text += " " + tab[i];
             }
+            textBox2.Text = $"Czas sortowania: {stopwatch.ElapsedMilliseconds} ms";
+            long testuje = stopwatch.ElapsedMilliseconds;
         }
 
         public void Sortowanie2(System.Windows.Forms.TextBox textBox2)
@@ -101,6 +117,8 @@ namespace Ostrowski_Projekt
             textBox2.Text = "";
             int tmp;
             int j;
+            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
             for (int i = 1; i < tab.Length; i++)
             {
                 tmp = tab[i];
@@ -111,19 +129,22 @@ namespace Ostrowski_Projekt
                     j--;
                 }
                 tab[j + 1] = tmp;
-                // 3 2 5 6
-                // j i
             }
+            stopwatch.Stop();
 
             for (int i = 0; i < tab.Length; i++)
             {
                 textBox2.Text += " " + tab[i];
             }
+            textBox2.Text = $"Czas sortowania: {stopwatch.ElapsedMilliseconds} ms";
         }
         public void Sortowanie3(System.Windows.Forms.TextBox textBox2)
         {
             textBox2.Text = "";
             int tmp;
+
+            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
 
             for (int i = 0; i < tab.Length - 1; i++)
             {
@@ -141,12 +162,14 @@ namespace Ostrowski_Projekt
                 }
 
             }
+            stopwatch.Stop();
 
 
             for (int i = 0; i < tab.Length; i++)
             {
                 textBox2.Text += " " + tab[i];
             }
+            textBox2.Text = $"Czas sortowania: {stopwatch.ElapsedMilliseconds} ms";
         }
 
     }
