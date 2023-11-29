@@ -6,7 +6,11 @@ namespace Ostrowski_Projekt
 {
     public partial class Form1 : Form   
     {
-        private Liczby liczby = new Liczby();
+        
+        private Liczby liczbyB = new Bubble(20000);
+        private Liczby liczbyI = new Insert(20000);
+        private Liczby liczbyS = new Insert(20000);
+            
         public Form1()
         {
             InitializeComponent();
@@ -14,26 +18,23 @@ namespace Ostrowski_Projekt
 
         private void button1_Click(object sender, EventArgs e)
         {
-            liczby.Generowanie(textBox1);
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            if (checkBox1.Checked)
+            //for()
+            if(checkBox1.Checked)
             {
-                liczby.Sortowanie(textBox2);
-               
-            }
-            else if (checkBox2.Checked)
+                    liczbyB.Generowanie(textBox1);
+                    liczbyB.Sortowanie(textBox2);
+            }else if (checkBox2.Checked)
             {
-                liczby.Sortowanie2(textBox2);
-               
+                liczbyI.Generowanie(textBox1);
+                liczbyI.Sortowanie(textBox2);
             }
             else if (checkBox3.Checked)
             {
-                liczby.Sortowanie3(textBox2);
-              
+                liczbyS.Generowanie(textBox1);
+                liczbyS.Sortowanie(textBox2);
+
             }
+            //  liczby.Generowanie(textBox1);
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -58,15 +59,15 @@ namespace Ostrowski_Projekt
 
 
     }
-    public class Liczby
+     abstract public class Liczby
     {
         Random generuj = new Random();
-        public int[] tab;
-        
+        protected int[] tab;
+       
 
-        public Liczby()
+        public Liczby(int n)
         {
-            tab = new int[1000];
+            tab = new int[n];
         }
 
         public void Generowanie(System.Windows.Forms.TextBox textBox1)
@@ -83,7 +84,15 @@ namespace Ostrowski_Projekt
             }
         }
 
-        public void Sortowanie(System.Windows.Forms.TextBox textBox2)
+        abstract public void Sortowanie(System.Windows.Forms.TextBox textBox2);
+        
+    }
+    public class Bubble : Liczby
+    {
+        public Bubble(int n) : base(n)
+        {
+        }
+        public override void Sortowanie(System.Windows.Forms.TextBox textBox2)
         {
             textBox2.Text = "";
             int tmp;
@@ -109,10 +118,15 @@ namespace Ostrowski_Projekt
                 textBox2.Text += " " + tab[i];
             }
             textBox2.Text = $"Czas sortowania: {stopwatch.ElapsedMilliseconds} ms";
-            long testuje = stopwatch.ElapsedMilliseconds;
-        }
 
-        public void Sortowanie2(System.Windows.Forms.TextBox textBox2)
+        }
+    }
+
+    public class Insert : Liczby
+    {
+        public Insert(int n) : base(n) { }
+
+        public override void Sortowanie(System.Windows.Forms.TextBox textBox2)
         {
             textBox2.Text = "";
             int tmp;
@@ -138,7 +152,13 @@ namespace Ostrowski_Projekt
             }
             textBox2.Text = $"Czas sortowania: {stopwatch.ElapsedMilliseconds} ms";
         }
-        public void Sortowanie3(System.Windows.Forms.TextBox textBox2)
+    }
+
+    public class Select : Liczby
+    {
+        public Select(int n) : base(n) { }
+
+        public override void Sortowanie(System.Windows.Forms.TextBox textBox2)
         {
             textBox2.Text = "";
             int tmp;
@@ -171,10 +191,34 @@ namespace Ostrowski_Projekt
             }
             textBox2.Text = $"Czas sortowania: {stopwatch.ElapsedMilliseconds} ms";
         }
+    }
+
+    public class Merge : Liczby
+    { 
+        public Merge(int n) : base(n) { }
+
+        public override void Sortowanie(System.Windows.Forms.TextBox textBox2)
+        {
+            textBox2.Text = "";
+            int[] tmpA= new int[tab.Length/2];
+            int[] tmpB= new int[tab.Length-tmpA.Length];
+            //1 9 3 7 3 9 3 8 9
+
+        //protected int[] tab;
+        //public Liczby(int n)
+        //{
+        //    tab = new int[n];
+        //}
+
+            for (int i=0;i < tab.Length/2; i++)
+            {
+                tmpA[i] = tab[i];
+            }
+            
+          
+        }
 
     }
 
-
-
-}
+    }
 
