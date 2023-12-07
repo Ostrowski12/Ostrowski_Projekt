@@ -1,42 +1,104 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Ostrowski_Projekt
 {
-    public partial class Form1 : Form   
+    public partial class Form1 : Form
     {
+        List<Liczby> listaLiczb = new List<Liczby>();
+       
+
+        private Liczby liczbyB = new Bubble(1000);
+        private Liczby liczbyB1 = new Bubble(2000);
+        private Liczby liczbyB2 = new Bubble(4000);
+        private Liczby liczbyB3 = new Bubble(8000);
         
-        private Liczby liczbyB = new Bubble(20000);
-        private Liczby liczbyI = new Insert(20000);
-        private Liczby liczbyS = new Insert(20000);
-            
+        private Liczby liczbyI = new Insert(1000);
+        private Liczby liczbyI1 = new Insert(2000);
+        private Liczby liczbyI2 = new Insert(4000);
+        private Liczby liczbyI3 = new Insert(8000);
+
+        private Liczby liczbyS = new Select(1000);
+        private Liczby liczbyS1 = new Select(2000);
+        private Liczby liczbyS2 = new Select(4000);
+        private Liczby liczbyS3 = new Select(8000);
         public Form1()
         {
             InitializeComponent();
+
+        }
+
+        public void DodajDoListyB()
+        {
+            listaLiczb.Clear();
+            listaLiczb.Add(liczbyB);
+            listaLiczb.Add(liczbyB1);
+            listaLiczb.Add(liczbyB2);
+            listaLiczb.Add(liczbyB3);
+        }
+
+        public void DodajDoListyI()
+        {
+            listaLiczb.Clear();
+            listaLiczb.Add(liczbyI);
+            listaLiczb.Add(liczbyI1);
+            listaLiczb.Add(liczbyI2);
+            listaLiczb.Add(liczbyI3);
+        }
+        public void DodajDoListyS()
+        {
+            listaLiczb.Clear();
+            listaLiczb.Add(liczbyS);
+            listaLiczb.Add(liczbyS1);
+            listaLiczb.Add(liczbyS2);
+            listaLiczb.Add(liczbyS3);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //for()
-            if(checkBox1.Checked)
+
+            if (checkBox1.Checked)
             {
-                    liczbyB.Generowanie(textBox1);
-                    liczbyB.Sortowanie(textBox2);
-            }else if (checkBox2.Checked)
+                DodajDoListyB();
+                foreach (Liczby elem in listaLiczb)
+                {
+                    elem.Generowanie();
+                    elem.Sortowanie();
+                    elem.DodajNaWykres(chart1);
+
+                }
+             
+            }
+            else if (checkBox2.Checked)
             {
-                liczbyI.Generowanie(textBox1);
-                liczbyI.Sortowanie(textBox2);
+                DodajDoListyI();
+                foreach (Liczby elem in listaLiczb)
+                {
+                    elem.Generowanie();
+                    elem.Sortowanie();
+                    elem.DodajNaWykres(chart1);
+
+                }
             }
             else if (checkBox3.Checked)
             {
-                liczbyS.Generowanie(textBox1);
-                liczbyS.Sortowanie(textBox2);
+                DodajDoListyS();
+                foreach (Liczby elem in listaLiczb)
+                {
+                    elem.Generowanie();
+                    elem.Sortowanie();
+                    elem.DodajNaWykres(chart1);
+
+                }
 
             }
-            //  liczby.Generowanie(textBox1);
-        }
 
+       
+        }
+    
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
 
@@ -56,6 +118,7 @@ namespace Ostrowski_Projekt
         {
 
         }
+        
 
 
     }
@@ -63,6 +126,7 @@ namespace Ostrowski_Projekt
     {
         Random generuj = new Random();
         protected int[] tab;
+      
        
 
         public Liczby(int n)
@@ -70,31 +134,35 @@ namespace Ostrowski_Projekt
             tab = new int[n];
         }
 
-        public void Generowanie(System.Windows.Forms.TextBox textBox1)
+        public void Generowanie()
         {
-            textBox1.Text = "";
+            
             for (int i = 0; i < tab.Length; i++)
             {
                 tab[i] = generuj.Next(100);
             }
 
-            for (int i = 0; i < tab.Length; i++)
-            {
-                textBox1.Text += " " + tab[i];
-            }
         }
 
-        abstract public void Sortowanie(System.Windows.Forms.TextBox textBox2);
-        
+        abstract public void Sortowanie();
+        abstract public void DodajNaWykres(Chart chart1);
+
+
+
     }
+
+
     public class Bubble : Liczby
     {
+        public long test;
+        protected long czas;
         public Bubble(int n) : base(n)
         {
+
         }
-        public override void Sortowanie(System.Windows.Forms.TextBox textBox2)
+        public override void Sortowanie()
         {
-            textBox2.Text = "";
+            
             int tmp;
 
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
@@ -113,22 +181,46 @@ namespace Ostrowski_Projekt
                 }
             }
             stopwatch.Stop();
-            for (int i = 0; i < tab.Length; i++)
-            {
-                textBox2.Text += " " + tab[i];
-            }
-            textBox2.Text = $"Czas sortowania: {stopwatch.ElapsedMilliseconds} ms";
+            
+            czas = stopwatch.ElapsedMilliseconds;
+        }
 
+        public override void DodajNaWykres(Chart chart1)
+            {
+            if (chart1.Series.Count == 0)
+            {
+               
+                Series series = new Series("Bąbelkowe");
+                
+                chart1.Series.Add(series);
+            }
+            else
+            {
+                
+                Series existingSeries = chart1.Series.FindByName("Bąbelkowe");
+
+                if (existingSeries == null)
+                {
+                    
+                    Series series = new Series("Bąbelkowe");
+                    series.ChartType = SeriesChartType.Line;
+                    chart1.Series.Add(series);
+                }
+            }
+
+           
+            chart1.Series["Bąbelkowe"].Points.AddXY(tab.Length, czas);
         }
     }
 
     public class Insert : Liczby
     {
         public Insert(int n) : base(n) { }
+        protected long czas;
 
-        public override void Sortowanie(System.Windows.Forms.TextBox textBox2)
+        public override void Sortowanie()
         {
-            textBox2.Text = "";
+            
             int tmp;
             int j;
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
@@ -145,23 +237,47 @@ namespace Ostrowski_Projekt
                 tab[j + 1] = tmp;
             }
             stopwatch.Stop();
-
-            for (int i = 0; i < tab.Length; i++)
-            {
-                textBox2.Text += " " + tab[i];
-            }
-            textBox2.Text = $"Czas sortowania: {stopwatch.ElapsedMilliseconds} ms";
+            czas = stopwatch.ElapsedMilliseconds;
         }
+
+        public override void DodajNaWykres(Chart chart1)
+        {
+            if (chart1.Series.Count == 0)
+            {
+              
+                Series series = new Series("Wstawianie");
+                series.ChartType = SeriesChartType.Line;
+                chart1.Series.Add(series);
+            }
+            else
+            {
+               
+                Series existingSeries = chart1.Series.FindByName("Wstawianie");
+
+                if (existingSeries == null)
+                {
+                   
+                    Series series = new Series("Wstawianie");
+                    series.ChartType = SeriesChartType.Line;
+                    chart1.Series.Add(series);
+                }
+            }
+
+          
+            chart1.Series["Wstawianie"].Points.AddXY( tab.Length, czas);
+        }
+
+
     }
 
     public class Select : Liczby
     {
         public Select(int n) : base(n) { }
-
-        public override void Sortowanie(System.Windows.Forms.TextBox textBox2)
-        {
-            textBox2.Text = "";
+        protected long czas;
+        public override void Sortowanie()
+        { 
             int tmp;
+
 
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
             stopwatch.Start();
@@ -184,22 +300,44 @@ namespace Ostrowski_Projekt
             }
             stopwatch.Stop();
 
-
-            for (int i = 0; i < tab.Length; i++)
-            {
-                textBox2.Text += " " + tab[i];
-            }
-            textBox2.Text = $"Czas sortowania: {stopwatch.ElapsedMilliseconds} ms";
+        czas = stopwatch.ElapsedMilliseconds;
         }
+        public override void DodajNaWykres(Chart chart1)
+        {
+            if (chart1.Series.Count == 0)
+            {
+                Series series = new Series("Wybór");
+              
+                chart1.Series.Add(series);
+            }
+            else
+            {
+               
+                Series existingSeries = chart1.Series.FindByName("Wybór");
+
+                if (existingSeries == null)
+                {
+                    
+                    Series series = new Series("Wybór");
+                    series.ChartType = SeriesChartType.Line;
+                    chart1.Series.Add(series);
+                }
+            }
+
+           
+            chart1.Series["Wybór"].Points.AddXY(tab.Length,czas);
+        }
+
+
     }
 
     public class Merge : Liczby
     { 
         public Merge(int n) : base(n) { }
 
-        public override void Sortowanie(System.Windows.Forms.TextBox textBox2)
+        public override void Sortowanie()
         {
-            textBox2.Text = "";
+          
             int[] tmpA= new int[tab.Length/2];
             int[] tmpB= new int[tab.Length-tmpA.Length];
             //1 9 3 7 3 9 3 8 9
@@ -217,7 +355,10 @@ namespace Ostrowski_Projekt
             
           
         }
+        public override void DodajNaWykres(Chart chart1)
+        {
 
+        }
     }
 
     }
