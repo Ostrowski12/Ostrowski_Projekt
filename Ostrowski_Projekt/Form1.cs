@@ -10,81 +10,42 @@ namespace Ostrowski_Projekt
     public partial class Form1 : Form
     {
         List<Liczby> listaLiczb = new List<Liczby>();
-       
-        private Liczby liczbyB = new Bubble(1000);
-        private Liczby liczbyB1 = new Bubble(2000);
-        private Liczby liczbyB2 = new Bubble(4000);
-        private Liczby liczbyB3 = new Bubble(8000);
-        
-        private Liczby liczbyI = new Insert(1000);
-        private Liczby liczbyI1 = new Insert(2000);
-        private Liczby liczbyI2 = new Insert(4000);
-        private Liczby liczbyI3 = new Insert(8000);
-
-        private Liczby liczbyS = new Select(1000);
-        private Liczby liczbyS1 = new Select(2000);
-        private Liczby liczbyS2 = new Select(4000);
-        private Liczby liczbyS3 = new Select(8000);
-
-        private Liczby liczbyM = new Merge(1000);
-        private Liczby liczbyM1 = new Merge(2000);
-        private Liczby liczbyM2 = new Merge(4000);
-        private Liczby liczbyM3 = new Merge(8000);
-        
-        private Liczby liczbyQ = new Quick(1000);
-        private Liczby liczbyQ1 = new Quick(2000);
-        private Liczby liczbyQ2 = new Quick(4000);
-        private Liczby liczbyQ3 = new Quick(8000);
         public Form1()
         {
             InitializeComponent();
         }
-        public void DodajDoListyB()
+        public void DodajDoListy()
         {
             listaLiczb.Clear();
-            listaLiczb.Add(liczbyB);
-            listaLiczb.Add(liczbyB1);
-            listaLiczb.Add(liczbyB2);
-            listaLiczb.Add(liczbyB3);
-        }
-
-        public void DodajDoListyI()
-        {
-            listaLiczb.Clear();
-            listaLiczb.Add(liczbyI);
-            listaLiczb.Add(liczbyI1);
-            listaLiczb.Add(liczbyI2);
-            listaLiczb.Add(liczbyI3);
-        }
-        public void DodajDoListyS()
-        {
-            listaLiczb.Clear();
-            listaLiczb.Add(liczbyS);
-            listaLiczb.Add(liczbyS1);
-            listaLiczb.Add(liczbyS2);
-            listaLiczb.Add(liczbyS3);
-        }
-        public void DodajDoListyM()
-        {
-            listaLiczb.Clear();
-            listaLiczb.Add(liczbyM);
-            listaLiczb.Add(liczbyM1);
-            listaLiczb.Add(liczbyM2);
-            listaLiczb.Add(liczbyM3);
-        }
-        public void DodajDoListyQ()
-        {
-            listaLiczb.Clear();
-            listaLiczb.Add(liczbyQ);
-            listaLiczb.Add(liczbyQ1);
-            listaLiczb.Add(liczbyQ2);
-            listaLiczb.Add(liczbyQ3);
+            for(int i=0;i<=15;i++)
+            {
+            if(checkBox1.Checked)
+                {
+                  listaLiczb.Add(new Bubble(1000*i));
+                }
+                else if(checkBox2.Checked)
+                {
+                   listaLiczb.Add(new Insert(1000 * i));
+                }
+                else if (checkBox3.Checked)
+                {
+                    listaLiczb.Add(new Select(1000 * i));
+                }
+                else if (checkBox4.Checked)
+                {
+                    listaLiczb.Add(new Merge(1000 * i));
+                }
+                else if (checkBox5.Checked)
+                {
+                    listaLiczb.Add(new Quick(1000 * i));
+                }
+            }
         }
         private void button1_Click(object sender, EventArgs e)
         {
             if (checkBox1.Checked)
             {
-                DodajDoListyB();
+                DodajDoListy();
                 foreach (Liczby elem in listaLiczb)
                 {
                     if (radioButton1.Checked)
@@ -110,7 +71,7 @@ namespace Ostrowski_Projekt
             }
             else if (checkBox2.Checked)
             {
-                DodajDoListyI();
+                DodajDoListy();
                 foreach (Liczby elem in listaLiczb)
                 {
                     if (radioButton1.Checked)
@@ -136,7 +97,7 @@ namespace Ostrowski_Projekt
             }
             else if (checkBox3.Checked)
             {
-                DodajDoListyS();
+                DodajDoListy();
                 foreach (Liczby elem in listaLiczb)
                 {
                     if (radioButton1.Checked)
@@ -162,7 +123,7 @@ namespace Ostrowski_Projekt
             }
             else if (checkBox4.Checked)
             {
-                DodajDoListyM();
+                DodajDoListy();
                 foreach (Liczby elem in listaLiczb)
                 {
                     if (radioButton1.Checked)
@@ -187,7 +148,7 @@ namespace Ostrowski_Projekt
             }
             else if (checkBox5.Checked)
             {
-                DodajDoListyQ();
+                DodajDoListy();
                 foreach (Liczby elem in listaLiczb)
                 {
                     if (radioButton1.Checked)
@@ -212,27 +173,19 @@ namespace Ostrowski_Projekt
             }
         }
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
+        {}
         private void chart1_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        {}
         private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-
-        }
+        {}
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
+        {}
         private void button2_Click(object sender, EventArgs e)
         {
             chart1.Series.Clear();
+        }
+        private void contextMenuStrip2_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
 
         }
     }
@@ -248,17 +201,16 @@ namespace Ostrowski_Projekt
         {    
             for (int i = 0; i < tab.Length; i++)
             {
-                tab[i] = generuj.Next(100);
+                tab[i] = generuj.Next(10000);
             }
         }
-
         public void GenerowanieMIN()
         {
             int tmp;
             int j;
             for (int i = 0; i < tab.Length; i++)
             {
-                tab[i] = generuj.Next(100);
+                tab[i] = generuj.Next(10000);
             }
 
             for (int i = 1; i < tab.Length; i++)
@@ -271,17 +223,15 @@ namespace Ostrowski_Projekt
                     j--;
                 }
                 tab[j + 1] = tmp;
-            }
-
+            }       
         }
-
         public void GenerowanieMAX()
         {
             int tmp;
             int j;
             for (int i = 0; i < tab.Length; i++)
             {
-                tab[i] = generuj.Next(100);
+                tab[i] = generuj.Next(10000);
             }
 
             for (int i = 1; i < tab.Length; i++)
@@ -295,9 +245,7 @@ namespace Ostrowski_Projekt
                 }
                 tab[j + 1] = tmp;
             }
-
         }
-
         abstract public void Sortowanie();
         abstract public void DodajNaWykres(Chart chart1,RadioButton radioButton);
     }
@@ -581,7 +529,7 @@ namespace Ostrowski_Projekt
                 }
             }
 
-            int tmp2 = tab[i + 1];
+            tmp2 = tab[i + 1];
             tab[i + 1] = tab[high];
             tab[high] = tmp2;
 
@@ -603,7 +551,6 @@ namespace Ostrowski_Projekt
 
                 if (existingSeries == null)
                 {
-
                     Series series = new Series("Szybkie " + radioButton.Text);
                     chart1.Series.Add(series);
                     series.ChartType = SeriesChartType.Line;
@@ -613,4 +560,3 @@ namespace Ostrowski_Projekt
         }
     }
     }
-
