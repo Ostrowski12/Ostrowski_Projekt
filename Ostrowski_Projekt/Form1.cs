@@ -181,18 +181,15 @@ namespace Ostrowski_Projekt
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {}
         private void button2_Click(object sender, EventArgs e)
-        {
-            chart1.Series.Clear();
-        }
+        {           chart1.Series.Clear();        }
         private void contextMenuStrip2_Opening(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-
-        }
+        {      }
     }
     abstract public class Liczby
     {
         Random generuj = new Random();
         protected int[] tab;
+        protected long czas;
         public Liczby(int n)
         {
             tab = new int[n];
@@ -208,11 +205,7 @@ namespace Ostrowski_Projekt
         {
             int tmp;
             int j;
-            for (int i = 0; i < tab.Length; i++)
-            {
-                tab[i] = generuj.Next(10000);
-            }
-
+            Generowanie();
             for (int i = 1; i < tab.Length; i++)
             {
                 tmp = tab[i];
@@ -229,11 +222,7 @@ namespace Ostrowski_Projekt
         {
             int tmp;
             int j;
-            for (int i = 0; i < tab.Length; i++)
-            {
-                tab[i] = generuj.Next(10000);
-            }
-
+            Generowanie();
             for (int i = 1; i < tab.Length; i++)
             {
                 tmp = tab[i];
@@ -247,12 +236,39 @@ namespace Ostrowski_Projekt
             }
         }
         abstract public void Sortowanie();
-        abstract public void DodajNaWykres(Chart chart1,RadioButton radioButton);
+        public long CzasSortowania
+        {
+            get { return czas; }
+        }
+        public void DodajNaWykres(Chart chart, RadioButton radioButton)
+        {
+            if (chart.Series.Count == 0)
+            {
+                Series series = new Series(Name(radioButton.Text));
+                chart.Series.Add(series);
+                series.ChartType = SeriesChartType.Line;
+            }
+            else
+            {
+                Series existingSeries = chart.Series.FindByName(Name(radioButton.Text));
+
+                if (existingSeries == null)
+                {
+                    Series series = new Series(Name(radioButton.Text));
+                    series.ChartType = SeriesChartType.Line;
+                    chart.Series.Add(series);
+                }
+            }
+            chart.Series[Name(radioButton.Text)].Points.AddXY(tab.Length, czas);
+        }
+        private string Name(string type)
+        {
+            return $"{GetName()} {type}";
+        }
+        abstract protected string GetName();
     }
     public class Bubble : Liczby
-    {
-        public long test;
-        protected long czas;
+    {  
         public Bubble(int n) : base(n) { }
         public override void Sortowanie()
         {        
@@ -272,37 +288,17 @@ namespace Ostrowski_Projekt
                     }
                 }
             }
-            stopwatch.Stop();  
+            stopwatch.Stop();
             czas = stopwatch.ElapsedMilliseconds;
-        }
-        public override void DodajNaWykres(Chart chart1, RadioButton radioButton)
+    }
+            protected override string GetName()
             {
-            if (chart1.Series.Count == 0)
-            {
-               
-                Series series = new Series("Bąbelkowe "+radioButton.Text);
-                
-                chart1.Series.Add(series);
-                series.ChartType = SeriesChartType.Line;
+            return "Bąbelkowe";
             }
-            else
-            { 
-                Series existingSeries = chart1.Series.FindByName("Bąbelkowe " + radioButton.Text);
-
-                if (existingSeries == null)
-                { 
-                    Series series = new Series("Bąbelkowe " + radioButton.Text);
-                    series.ChartType = SeriesChartType.Line;
-                    chart1.Series.Add(series);
-                }
-            }     
-            chart1.Series["Bąbelkowe " + radioButton.Text].Points.AddXY(tab.Length, czas);
-        }
     }
     public class Insert : Liczby
     {
         public Insert(int n) : base(n) { }
-        protected long czas;
         public override void Sortowanie()
         {     
             int tmp;
@@ -323,33 +319,14 @@ namespace Ostrowski_Projekt
             stopwatch.Stop();
             czas = stopwatch.ElapsedMilliseconds;
         }
-        public override void DodajNaWykres(Chart chart1, RadioButton radioButton)
-        {
-            if (chart1.Series.Count == 0)
-            { 
-                Series series = new Series("Wstawianie "+radioButton.Text);
-                chart1.Series.Add(series);
-                series.ChartType = SeriesChartType.Line;
-            }
-            else
-            {
-                Series existingSeries = chart1.Series.FindByName("Wstawianie "+radioButton.Text);
-
-                if (existingSeries == null)
-                {
-                   
-                    Series series = new Series("Wstawianie "+radioButton.Text);
-                    chart1.Series.Add(series);
-                    series.ChartType = SeriesChartType.Line;
-                }
-            }
-            chart1.Series["Wstawianie "+radioButton.Text].Points.AddXY( tab.Length, czas);
-        }
+         protected override string GetName()
+          {
+           return "Wstawianie ";
+         }
     }
     public class Select : Liczby
     {
         public Select(int n) : base(n) { }
-        protected long czas;
         public override void Sortowanie()
         { 
             int tmp;
@@ -372,33 +349,14 @@ namespace Ostrowski_Projekt
             stopwatch.Stop();
             czas = stopwatch.ElapsedMilliseconds;
         }
-        public override void DodajNaWykres(Chart chart1, RadioButton radioButton)
-        {
-            if (chart1.Series.Count == 0)
-            {
-                Series series = new Series("Wybór " + radioButton.Text);      
-                chart1.Series.Add(series);
-                series.ChartType = SeriesChartType.Line;
-            }
-            else
-            { 
-                Series existingSeries = chart1.Series.FindByName("Wybór " + radioButton.Text);
-
-                if (existingSeries == null)
-                {     
-                    Series series = new Series("Wybór " + radioButton.Text);
-                    chart1.Series.Add(series);
-                    series.ChartType = SeriesChartType.Line;
-                }
-            }
-            chart1.Series["Wybór " + radioButton.Text].Points.AddXY(tab.Length,czas);
-        }
+    protected override string GetName()
+    {
+        return "Wybór ";
+    }
     }
     public class Merge : Liczby
     { 
         public Merge(int n) : base(n) { }
-        protected long czas;
-
         public override void Sortowanie()
         {
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
@@ -462,34 +420,14 @@ namespace Ostrowski_Projekt
                 k++;
             }
         }
-        public override void DodajNaWykres(Chart chart1, RadioButton radioButton)
+        protected override string GetName()
         {
-            if (chart1.Series.Count == 0)
-            {
-                Series series = new Series("Scalanie " + radioButton.Text);
-                chart1.Series.Add(series);
-                series.ChartType = SeriesChartType.Line;
-            }
-            else
-            {
-                Series existingSeries = chart1.Series.FindByName("Scalanie " + radioButton.Text);
-
-                if (existingSeries == null)
-                {
-
-                    Series series = new Series("Scalanie " + radioButton.Text);
-                    chart1.Series.Add(series);
-                    series.ChartType = SeriesChartType.Line;
-                }
-            }
-            chart1.Series["Scalanie " + radioButton.Text].Points.AddXY(tab.Length, czas);
+            return "Scalanie ";
         }
     }
     public class Quick : Liczby
     {
         public Quick(int n) : base(n) { }
-        protected long czas;
-
         public override void Sortowanie()
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -535,28 +473,9 @@ namespace Ostrowski_Projekt
 
             return i + 1;
         }
-
-        public override void DodajNaWykres(Chart chart1, RadioButton radioButton)
+        protected override string GetName()
         {
-
-            if (chart1.Series.Count == 0)
-            {
-                Series series = new Series("Szybkie " + radioButton.Text);
-                chart1.Series.Add(series);
-                series.ChartType = SeriesChartType.Line;
-            }
-            else
-            {
-                Series existingSeries = chart1.Series.FindByName("Szybkie " + radioButton.Text);
-
-                if (existingSeries == null)
-                {
-                    Series series = new Series("Szybkie " + radioButton.Text);
-                    chart1.Series.Add(series);
-                    series.ChartType = SeriesChartType.Line;
-                }
-            }
-            chart1.Series["Szybkie " + radioButton.Text].Points.AddXY(tab.Length, czas);
+            return "Szybkie ";
         }
     }
     }
